@@ -1,5 +1,6 @@
 import express from 'express';
 import AuthController from '../controller/AuthController.js';
+import jwtAuth from '../middleware/JwtAuth.js';
 
 const route = express.Router();
 
@@ -9,6 +10,6 @@ route.get('/', (req, res) => {
 
 route.post('/register', AuthController.register)
 route.post('/login', AuthController.login)
-route.post('/refresh-token', AuthController.refreshToken)
+route.post('/refresh-token', jwtAuth(), AuthController.refreshToken)
 
 export default route;
