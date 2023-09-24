@@ -1,4 +1,4 @@
-import User from "../model/user.js";
+import User from "../model/UserModel.js";
 import EmailExits from "../libaries/EmailExits.js";
 import bcrypt from "bcrypt";
 import jsonwebtoken from "jsonwebtoken";
