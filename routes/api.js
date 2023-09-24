@@ -16,5 +16,6 @@ route.post('/refresh-token', jwtAuth(), AuthController.refreshToken)
 
 // Form
 route.post('/forms', jwtAuth(), FormController.store)
+route.get('/forms/:id', jwtAuth(), FormController.show)
 
 export default route;

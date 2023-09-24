@@ -1,3 +1,4 @@
+import mongoose from "mongoose";
 import FormModel from "../model/FormModel.js";
 
 class FormController {
@@ -27,6 +28,47 @@ class FormController {
             });
         }
     }
+
+    async show(req, res){
+      try {
+        if(!req.params.id) {
+            throw{
+                code :400,
+                message: 'REQUIRED_FROM_ID'
+            }
+        }
+
+        if(!mongoose.Types.ObjectId.isValid(req.params.id)){
+            throw{
+                code :400,
+                message: 'INVALID_ID'
+            }
+        }
+
+        const form = await FormModel.findOne(
+            {
+                _id: req.params.id,
+                userId: req.jwt.id
+            }
+        )
+        if(!form){
+            throw{
+                code :400,
+                message: 'FORM_NOT_FOUND'
+            }
+        }
+        return res.status(200).json({
+            status: true,
+            message: 'SUCCESS_GET_FORM',
+            form
+        })
+      } catch (error) {
+        return res.status(error.code || 500).json({
+            status: false,
+            message: error.message
+        });
+      }
+}
 }
 
 export default new FormController();
