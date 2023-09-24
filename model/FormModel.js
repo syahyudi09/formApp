@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import mongoosepaginate from "mongoose-paginate-v2";
 
 const Schema = new mongoose.Schema({
     userId: {
@@ -35,5 +36,7 @@ const Schema = new mongoose.Schema({
         currentTime: () => Math.floor(Date.now() / 1000),
     },
 });
+
+Schema.plugin(mongoosepaginate)
 
 export default mongoose.model('Form', Schema);
