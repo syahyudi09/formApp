@@ -26,7 +26,7 @@ route.delete('/forms/:id', jwtAuth(), FormController.destroy)
 // route.get('/forms', jwtAuth(), FormController.index)
 route.post('/forms/:id/question', jwtAuth(), QuestionController.store)
 // route.get('/forms/:id', jwtAuth(), FormController.show)
-// route.put('/forms/:id', jwtAuth(), FormController.update)
+route.put('/forms/:id/question/:questionId', jwtAuth(), QuestionController.update)
 // route.delete('/forms/:id', jwtAuth(), FormController.destroy)
 
 
