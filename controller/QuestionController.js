@@ -1,6 +1,13 @@
 import mongoose, { set } from "mongoose";
 import FormModel from "../model/FormModel.js";
 
+const allowanceType = [
+    'Text',
+    'Radio',
+    'Checkbox',
+    'Dropdown'
+]
+
 class QuestionsController{
     async store(req, res){
         try {
@@ -42,7 +49,7 @@ class QuestionsController{
             if(!form){
                 throw{
                     code:400,
-                    message: 'FORM_UPDATE_FAILED'
+                    message: 'QUESTION_UPDATE_FAILED'
                 }
             }
 
@@ -94,6 +101,12 @@ class QuestionsController{
             }else if(req.body.hasOwnProperty('required')){
                 field['questions.$[indexQuestion].required'] = req.body.required
             }else if(req.body.hasOwnProperty('type')){
+                if(!allowanceType.includes(req.body.type)){
+                    throw{
+                        code: 400,
+                        message: 'INVALID_QUESTION_TYPE'
+                    }
+                }
                 field['questions.$[indexQuestion].type'] = req.body.type
             }
 
@@ -127,6 +140,59 @@ class QuestionsController{
             })
         } catch (error) {
             console.log(error)
+            return res.status(error.code || 500).json({
+                status: false,
+                message: error.message
+            });
+        }
+    }
+
+    async destroy(req, res){
+        try {
+            if(!req.params.id){
+                throw{
+                    code: 400,
+                    message: 'REQUIRED_FROM_ID'
+                }
+            }
+            if(!mongoose.Types.ObjectId.isValid(req.params.id)){
+                throw{
+                    code: 400,
+                    message: 'INVALID_ID'
+                }
+            }
+            const form = await FormModel.findOneAndUpdate(
+                {
+                    _id: req.params.id,
+                    userId: req.jwt.id
+                },
+                {
+                    $pull: {
+                        questions:{
+                            id: new mongoose.Types.ObjectId(req.params.questionId)
+                        }
+                    }
+                },
+                {
+                    new:true
+                }
+            )
+
+            if(!form){
+                throw{
+                    code:400,
+                    message: 'DELETE_QUESTION_FAILED'
+                }
+            }
+
+            return res.status(200).json(
+                {
+                    status: true,
+                    message: 'DELETE_QUESTION_SUCCESS',
+                    form
+                }
+            )
+        } catch (error) {
             return res.status(error.code || 500).json({
                 status: false,
                 message: error.message

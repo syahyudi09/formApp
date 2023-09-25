@@ -27,7 +27,7 @@ route.delete('/forms/:id', jwtAuth(), FormController.destroy)
 route.post('/forms/:id/question', jwtAuth(), QuestionController.store)
 // route.get('/forms/:id', jwtAuth(), FormController.show)
 route.put('/forms/:id/question/:questionId', jwtAuth(), QuestionController.update)
-// route.delete('/forms/:id', jwtAuth(), FormController.destroy)
+route.delete('/forms/:id/question/:questionId', jwtAuth(), QuestionController.destroy)
 
 
 export default route;
