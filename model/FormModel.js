@@ -13,7 +13,7 @@ const Schema = new mongoose.Schema({
         type: String,
     },
     questions: {
-        type: Array,
+       type: Array
     },
     invites: {
         type: Array,

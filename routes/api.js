@@ -3,6 +3,7 @@ import AuthController from '../controller/AuthController.js';
 import jwtAuth from '../middleware/JwtAuth.js';
 import FormController from '../controller/FormController.js';
 import QuestionController from '../controller/QuestionController.js';
+import OptionController from '../controller/OptionController.js';
 
 const route = express.Router();
 
@@ -27,6 +28,12 @@ route.get('/forms/:id/question', jwtAuth(), QuestionController.index)
 route.post('/forms/:id/question', jwtAuth(), QuestionController.store)
 route.put('/forms/:id/question/:questionId', jwtAuth(), QuestionController.update)
 route.delete('/forms/:id/question/:questionId', jwtAuth(), QuestionController.destroy)
+
+// Option
+// route.get('/forms/:id/question', jwtAuth(), QuestionController.index)
+route.post('/forms/:id/question/:questionId/options', jwtAuth(), OptionController.store)
+route.put('/forms/:id/question/:questionId/options/:optionId', jwtAuth(), OptionController.update)
+route.delete('/forms/:id/question/:questionId/options/:optionId', jwtAuth(), OptionController.destroy)
 
 
 export default route;

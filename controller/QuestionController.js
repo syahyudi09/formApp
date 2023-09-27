@@ -57,7 +57,7 @@ class QuestionsController{
                 question: null,
                 type: 'Text',
                 required: false,
-                option: []
+                options: []
             }
 
             const form = await FormModel.findOneAndUpdate(
