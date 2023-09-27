@@ -4,6 +4,7 @@ import jwtAuth from '../middleware/JwtAuth.js';
 import FormController from '../controller/FormController.js';
 import QuestionController from '../controller/QuestionController.js';
 import OptionController from '../controller/OptionController.js';
+import AnswerController from '../controller/AnswerController.js';
 
 const route = express.Router();
 
@@ -34,6 +35,9 @@ route.delete('/forms/:id/question/:questionId', jwtAuth(), QuestionController.de
 route.post('/forms/:id/question/:questionId/options', jwtAuth(), OptionController.store)
 route.put('/forms/:id/question/:questionId/options/:optionId', jwtAuth(), OptionController.update)
 route.delete('/forms/:id/question/:questionId/options/:optionId', jwtAuth(), OptionController.destroy)
+
+// answer
+route.post('/answers/:formId', jwtAuth(), AnswerController.store)
 
 
 export default route;
