@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
 import FormController from "./FormController.js";
 import AnswerModel from "../model/AnswerModel.js";
+import AnswerDuplicate from "../libaries/AnswerDuplicate.js";
 
 class AnswerController {
 
@@ -16,6 +17,14 @@ class AnswerController {
                 throw{
                     code: 400,
                     message: 'INVALID FORM ID'
+                }
+            }
+
+            const isDuplicate = await AnswerDuplicate(req.body.answers)
+            if(isDuplicate) {
+                throw{
+                    code: 400,
+                    message: 'DUPLICATE_ANSWER'
                 }
             }
     
