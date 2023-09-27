@@ -18,6 +18,7 @@ route.post('/refresh-token', jwtAuth(), AuthController.refreshToken)
 
 // Form
 route.get('/forms', jwtAuth(), FormController.index)
+route.get('/forms/:id/users', jwtAuth(), FormController.showToUser)
 route.post('/forms', jwtAuth(), FormController.store)
 route.get('/forms/:id', jwtAuth(), FormController.show)
 route.put('/forms/:id', jwtAuth(), FormController.update)
@@ -30,7 +31,6 @@ route.put('/forms/:id/question/:questionId', jwtAuth(), QuestionController.updat
 route.delete('/forms/:id/question/:questionId', jwtAuth(), QuestionController.destroy)
 
 // Option
-// route.get('/forms/:id/question', jwtAuth(), QuestionController.index)
 route.post('/forms/:id/question/:questionId/options', jwtAuth(), OptionController.store)
 route.put('/forms/:id/question/:questionId/options/:optionId', jwtAuth(), OptionController.update)
 route.delete('/forms/:id/question/:questionId/options/:optionId', jwtAuth(), OptionController.destroy)

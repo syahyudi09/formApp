@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 import FormModel from "../model/FormModel.js";
+import UserModel from "../model/UserModel.js";
 
 class FormController {
 
@@ -42,6 +43,7 @@ class FormController {
                 userId: req.jwt.id,
                 title: 'Untitled Form', // Fixed the typo in 'title'
                 description: null,
+                options: [],
                 isPublic: true, // Changed 'public' to 'isPublic'
             });
             if (!form) {
@@ -191,6 +193,61 @@ class FormController {
             });
         }
     }
+    
+    async showToUser(req, res){
+        try {
+            if(!req.params.id) {
+                throw{
+                    code :400,
+                    message: 'REQUIRED_FROM_ID'
+                }
+            }
+    
+            if(!mongoose.Types.ObjectId.isValid(req.params.id)){
+                throw{
+                    code :400,
+                    message: 'INVALID_ID'
+                }
+            }
+    
+            const form = await FormModel.findOne(
+                {
+                    _id: req.params.id,
+                }
+            )
+            if(!form){
+                throw{
+                    code :400,
+                    message: 'FORM_NOT_FOUND'
+                }
+            }
+
+            if(req.jwt.id != form.userId && form.isPublic === false){
+                const user = await UserModel.findOne({
+                    _id: req.jwt.id
+                })
+
+                if(!form.invites.includes(user.email)){
+                    throw{
+                        code: 401,
+                        message: 'YOU_ARE_NOT_INVITES'
+                    }
+                }
+            }
+
+            form.invites = []
+            return res.status(200).json({
+                status: true,
+                message: 'SUCCESS_GET_FORM',
+                form
+            })
+          } catch (error) {
+            return res.status(error.code || 500).json({
+                status: false,
+                message: error.message
+            });
+          }
+        }
     
 }
 
