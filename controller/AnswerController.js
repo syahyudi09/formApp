@@ -2,6 +2,8 @@ import mongoose from "mongoose";
 import FormController from "./FormController.js";
 import AnswerModel from "../model/AnswerModel.js";
 import AnswerDuplicate from "../libaries/AnswerDuplicate.js";
+import QuestuinRequired from "../libaries/QuestionRequired.js";
+import FormModel from "../model/FormModel.js";
 
 class AnswerController {
 
@@ -20,11 +22,21 @@ class AnswerController {
                 }
             }
 
+            const form = await FormModel.findById(req.params.formId)
+
             const isDuplicate = await AnswerDuplicate(req.body.answers)
             if(isDuplicate) {
                 throw{
                     code: 400,
                     message: 'DUPLICATE_ANSWER'
+                }
+            }
+
+            const questionRequired = await QuestuinRequired(form, req.body.answers)
+            if(!questionRequired) {
+                throw{
+                    code: 400,
+                    message: 'QUESTION_REQUIRED_BUT_EMPTY'
                 }
             }
     
