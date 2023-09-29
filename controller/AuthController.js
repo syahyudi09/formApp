@@ -1,5 +1,5 @@
 import User from "../model/UserModel.js";
-import EmailExits from "../libaries/EmailExits.js";
+import EmailExits from "../libaries/emailExits.js";
 import bcrypt from "bcrypt";
 import jsonwebtoken from "jsonwebtoken";
 import dotenv from 'dotenv';

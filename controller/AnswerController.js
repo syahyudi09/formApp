@@ -1,9 +1,10 @@
 import mongoose from "mongoose";
 import FormController from "./FormController.js";
 import AnswerModel from "../model/AnswerModel.js";
-import AnswerDuplicate from "../libaries/AnswerDuplicate.js";
-import QuestuinRequired from "../libaries/QuestionRequired.js";
+import answerDuplicate from "../libaries/AnswerDuplicate.js";
+import questionRequiredButEmpty from "../libaries/QuestionRequired.js";
 import FormModel from "../model/FormModel.js";
+import optionValueNotExits from "../libaries/optionValueNotExits.js";
 
 class AnswerController {
 
@@ -24,7 +25,7 @@ class AnswerController {
 
             const form = await FormModel.findById(req.params.formId)
 
-            const isDuplicate = await AnswerDuplicate(req.body.answers)
+            const isDuplicate = await answerDuplicate(req.body.answers)
             if(isDuplicate) {
                 throw{
                     code: 400,
@@ -32,7 +33,15 @@ class AnswerController {
                 }
             }
 
-            const questionRequired = await QuestuinRequired(form, req.body.answers)
+            const optionValue = await optionValueNotExits(form, req.body.answers)
+            if(!optionValue) {
+                throw{
+                    code: 400,
+                    message: 'OPTION_VALUE_NOT_EXITS'
+            }
+            }
+
+            const questionRequired = await questionRequiredButEmpty(form, req.body.answers)
             if(!questionRequired) {
                 throw{
                     code: 400,
