@@ -1,5 +1,5 @@
 import User from "../model/UserModel.js";
-import EmailExits from "../libaries/emailExits.js";
+import EmailExits from "../libraries/emailExits.js";
 import bcrypt from "bcrypt";
 import jsonwebtoken from "jsonwebtoken";
 import dotenv from 'dotenv';
@@ -55,10 +55,16 @@ class AuthController {
                 };
             }
 
+            let payload = {id: user._id}
+            const accessToken = await generateAccessToken(payload)
+            const refreshToken = await generateRefreshToken(payload)
+
             return res.status(200).json({
                 status: true,
                 message: 'USER REGISTER SUCCESS',
-                user
+                fullname: user.fullname,
+                accessToken,
+                refreshToken
             });
         } catch (error) {
             return res.status(error.code || 500).json({
@@ -86,8 +92,9 @@ class AuthController {
                 message: 'INVALID_PASSWORD'
             }}
 
-            const accessToken = await generateAccessToken({id: user._id})
-            const refreshToken = await generateRefreshToken({id: user._id})
+            let payload = {id: user._id}
+            const accessToken = await generateAccessToken(payload)
+            const refreshToken = await generateRefreshToken(payload)
 
             return res.status(200)
                 .json({

@@ -5,6 +5,7 @@ import FormController from '../controller/FormController.js';
 import QuestionController from '../controller/QuestionController.js';
 import OptionController from '../controller/OptionController.js';
 import AnswerController from '../controller/AnswerController.js';
+import InviteController from '../controller/InviteController.js';
 
 const route = express.Router();
 
@@ -38,6 +39,11 @@ route.delete('/forms/:id/question/:questionId/options/:optionId', jwtAuth(), Opt
 
 // answer
 route.post('/answers/:formId', jwtAuth(), AnswerController.store)
+
+// invite
+route.get('/forms/:id/invites', jwtAuth(), InviteController.index)
+route.post('/forms/:id/invites', jwtAuth(), InviteController.store)
+route.delete('/forms/:id/invites', jwtAuth(), InviteController.destroy)
 
 
 export default route;
